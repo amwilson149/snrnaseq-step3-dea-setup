@@ -1,0 +1,134 @@
+# config file for SUD differential expression
+# analysis (DEA)
+
+# input and output information
+#
+# input data parent directory (relative to root directory)
+input_data_dir: 'data' 
+# output data directory (relative to root)
+dea_data_dir: 'results' 
+# output subdirectory with DEA-formatted files
+dea_deseq_formatted_data_dir: 'dea__finalized_major_cell_type' 
+# output subdirectory with DESeq2-ready files (reformatted and subsetted for k-fold cross-validation)
+dea_ready_deseq_formatted_data_dir: 'diffexpr_ready_files' 
+# name tag for DESeq2-ready files
+dea_ready_deseq_formatted_data_fn_tag: '' 
+# diffexpr-ready file validity check summary file name
+dea_pass_fail_check_fn_root: 'dea_setup_check_file' 
+
+# random number generator setup
+#
+# input random state directory (relative to root directory)
+input_rng_state_dir: 'data/random_state_files' 
+# output random state directory (relative to root)
+output_rng_state_dir: 'results/random_state_files' 
+# dea random seed file subdirectory
+rng_dea_seeds_dir: 'dea_random_seed_files' 
+rng_dea_seed_file_tag: 'sud' 
+# qc and preprocessing RNG state file names
+rand_state_input_fn: 'sample_np_random_state_file.pkl' 
+rand_state_output_fn__kfcv_setup: 'numpy_random_state__after_03b__perform_kfcv_setup.pkl' 
+rand_state_output_fn__gen_dea_seeds: 'numpy_random_state__after_03d__gen_dea_rand_seeds.pkl' 
+
+# k-fold cross-validation setup
+#
+# k-fold cross-validation n fold info output directory (relative to root)
+kfcv_n_fold_log_dir: 'results/k_fold_cv_log' 
+# k-fold cross-validation log files
+n_folds_used_fn__03_dea__01: 'n_folds_used__03_dea__01.txt' 
+
+# dataset information
+# 
+# input expression data file name
+input_data_fn: 'human_SN_anndata__example.h5ad'
+
+# differential expression analysis information
+#
+# dataset partition variable
+dea_partition_variable: 'finalized_major_cell_type' 
+# covariates to use when building the DEA metadata
+# this is a dictionary in the form of 'cov_ann_name': {clin_df_name:_name_,dtype:_dtype_}
+dea_covariate_list: 
+        - 'sex'
+        - 'age'
+        - 'hiv_status'
+        - 'sud_status'
+        - 'additional_sud_dx'
+        - 'cd4_nadir_tp'
+        - 'cd4_final_tp'
+        - 'race'
+        - 'ethnicity'
+        - 'od_death'
+        - 'tissue_loc'
+        - 'pmi'
+# covariates to ignore when building the DEA
+# design function (e.g. because they don't show
+# enough variability per partition)
+# Either 'None' or a list of strings
+dea_covariates_to_ignore: 
+        - 'cd4_final_tp'
+# list of non-covariates
+dea_non_covariates: 
+        - 'barcode'
+        - 'patient_ID'
+        - 'pool_name'
+        - 'mito_frac'
+        - 'n_umi'
+        - 'n_gene'
+# test condition
+dea_test_condition: 'hiv_sud_status' 
+# test condition pre-build
+# instructions
+dea_test_pre_build_instructions: 
+        component_label_map:
+                hiv_status: 'HIV_status'
+                sud_status: 'SUD_status'
+        component_val_char_map:
+                '-': '_'
+# test condition build
+# instructions
+dea_test_cond_build_instructions: 
+        components:
+                hiv_status:
+                        neg: 'neg'
+                        pos_u: 'pos_u'
+                        pos_d: 'pos_d'
+                sud_status:
+                        n: 'n'
+                        op: 'y'
+                        c: 'y'
+                        opc: 'y'
+        join_char: '_'
+#
+# possible test levels
+dea_test_cond_levels: 
+        - 'neg_n'
+        - 'neg_y'
+        - 'pos_u_n'
+        - 'pos_u_y'
+        - 'pos_d_n'
+        - 'pos_d_y'
+#
+# condition comparison list
+# commenting out comparisons not present in toy dataset
+dea_cond_comparison_list: 
+#- ['hiv_sud_status','pos_d_y','pos_d_n']
+#       - ['hiv_sud_status','pos_u_y','pos_u_n']
+        - ['hiv_sud_status','neg_y','neg_n']
+
+# DESeq2 setup specifications
+#
+# test type ('Wald', 'LRT')
+dea_test_type: 'Wald' 
+
+# power-based sample size and k-fold cross-validation parameters
+# 
+# minimum number of barcodes required to run
+# diffexpr on a group
+dea_min_n_barcodes: 'None' 
+# minimum allowed sample size 
+dea_min_sample_size: 0 # original analysis had 30; setting to 1 for toy dataset
+# number of folds to use for k-fold cross-validation
+dea_n_folds_kfcv: 2 # original used 3 from power analysis; using 2 for toy dataset
+
+root_dir: '/sc/arion/projects/motor/WILSOA28/demuxlet_analysis/snrnaseq__03_dea_setup'
