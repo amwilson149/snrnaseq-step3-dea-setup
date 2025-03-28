@@ -11,8 +11,7 @@ sud_dea_dir="${exec_dir}/scripts"
 # 02a. Specify config file path
 cfg="${exec_dir}/configs/config_DEA_setup_example_SUD_DEA.yaml"
 echo "${cfg}"
-# 02b. Add root directory to config
-# file if it not specified
+# 02b. Add root directory to config file if not specified
 if ! $( grep -q 'root_dir' ${cfg} ); then
 	echo "Initializing config file with current directory as root directory"
 	echo "root_dir: '${exec_dir}'" >> ${cfg}
