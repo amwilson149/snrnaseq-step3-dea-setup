@@ -131,4 +131,3 @@ dea_min_sample_size: 0 # original analysis had 30; setting to 1 for toy dataset
 # number of folds to use for k-fold cross-validation
 dea_n_folds_kfcv: 2 # original used 3 from power analysis; using 2 for toy dataset
 
-root_dir: '/sc/arion/projects/motor/WILSOA28/demuxlet_analysis/snrnaseq__03_dea_setup'
